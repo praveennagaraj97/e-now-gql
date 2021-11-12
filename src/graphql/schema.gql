@@ -1,0 +1,206 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""Contains user info."""
+type UserSchema {
+  """UserName provided at the time of registration"""
+  userName: String
+
+  """User's email"""
+  email: String
+
+  """Unique id of the user"""
+  id: String
+}
+
+"""
+Provides token with response message, which can be used as bearer token / sets token which will be default used if credentials method is used.
+"""
+type RegisterOrLoginUserResponseSchema {
+  """response message"""
+  message: String!
+
+  """jwt token for the user session"""
+  token: String!
+}
+
+"""Provides response for update password with message and status"""
+type UpdatePasswordResponseSchema {
+  """Response message"""
+  message: String!
+
+  """Password updated status"""
+  status: Boolean!
+}
+
+"""Provides response for update password with message and status"""
+type GetMeResponseSchema {
+  """UserName provided at the time of registration"""
+  userName: String
+
+  """User's email"""
+  email: String
+
+  """Unique id of the user"""
+  id: String
+
+  """Response message"""
+  message: String!
+  products: [String]
+}
+
+type ProductSchema {
+  id: String!
+  productName: String!
+  shortDescription: String!
+  productPrice: Float!
+  quantity: Float!
+  productThumbnail: String
+  addedBy: UserSchema!
+}
+
+type ProductAddedSchema {
+  id: String!
+  productName: String!
+  shortDescription: String!
+  productPrice: Float!
+  quantity: Float!
+  productThumbnail: String
+  addedBy: UserSchema!
+  message: String!
+}
+
+"""Provides list of product"""
+type FindAllProductsSchema {
+  products: [ProductSchema!]!
+  message: String!
+}
+
+type ImageFileSchema {
+  id: String!
+  createdDate: DateTime!
+  updatedDate: DateTime!
+  fileName: String!
+  url: String!
+  encoding: String!
+  mimeType: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""Provide data for sliders / banners"""
+type SliderSchema {
+  id: String!
+  createdDate: DateTime!
+  updatedDate: DateTime!
+  image: ImageFileSchema!
+  heading: String
+  description: String
+  redirect_path: String
+}
+
+"""Provide info about slider added/not"""
+type CreateSliderResponseSchema {
+  id: String!
+  createdDate: DateTime!
+  updatedDate: DateTime!
+  image: ImageFileSchema!
+  heading: String
+  description: String
+  redirect_path: String
+  message: String!
+}
+
+"""Provide info about slider added/not"""
+type SlidersResponseSchema {
+  message: String!
+  sliders: [SliderSchema!]!
+}
+
+"""Provide info about slider updated/not"""
+type UpdateSlidersResponseSchema {
+  id: String!
+  createdDate: DateTime!
+  updatedDate: DateTime!
+  image: ImageFileSchema!
+  heading: String
+  description: String
+  redirect_path: String
+  message: String!
+}
+
+"""Provide info about slider deleted/not"""
+type DeleteSliderReponseSchema {
+  message: String!
+}
+
+type Query {
+  """Provides info of currently logged user"""
+  getMe: GetMeResponseSchema!
+  getSliders: SlidersResponseSchema!
+  getAllProducts: FindAllProductsSchema!
+}
+
+type Mutation {
+  registerUser(registerUserData: RegisterUserDTO!): RegisterOrLoginUserResponseSchema!
+  loginWithUsernameAndPassword(loginWithUsernameAndPasswordData: LoginWithUserNameAndPasswordDTO!): RegisterOrLoginUserResponseSchema!
+  loginWithEmailAndPassword(loginWithEmailAndPasswordData: LoginWithEmailAndPassDTO!): RegisterOrLoginUserResponseSchema!
+  updatePassword(updatePasswordData: UpdatePasswordDTO!): UpdatePasswordResponseSchema!
+  addAdmin: RegisterOrLoginUserResponseSchema!
+  addSlider(sliderImage: Upload!, input: CreateSliderDTO!): CreateSliderResponseSchema!
+  updateSlider(sliderImage: Upload, input: UpdateSliderDTO!): UpdateSlidersResponseSchema!
+  deleteSlider(id: String!): DeleteSliderReponseSchema!
+  addProduct(productThumbnail: Upload!, productData: AddProductDTO!): ProductAddedSchema!
+  uploadFile(file: Upload!): String!
+}
+
+"""Data required for the registration of user"""
+input RegisterUserDTO {
+  email: String!
+  password: String!
+  userName: String!
+}
+
+input LoginWithUserNameAndPasswordDTO {
+  password: String!
+  userName: String!
+}
+
+input LoginWithEmailAndPassDTO {
+  email: String!
+  password: String!
+}
+
+"""Data model schema for updating password"""
+input UpdatePasswordDTO {
+  currentPassword: String!
+  newPassword: String!
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+input CreateSliderDTO {
+  heading: String
+  description: String
+  redirect_path: String
+}
+
+input UpdateSliderDTO {
+  heading: String
+  description: String
+  redirect_path: String
+  id: String!
+}
+
+"""Input Data definition for adding new product."""
+input AddProductDTO {
+  """Name of the products"""
+  productName: String!
+  shortDescription: String!
+  productPrice: Float!
+}
